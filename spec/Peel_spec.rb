@@ -27,7 +27,6 @@ describe Peel::Alfred_Helper do
     xml_string = workflow_helper.put_results items
     xml_result = Nokogiri::XML(xml_string) {|c| c.strict}
     expect(xml_result.errors.empty?).to eq(true) 
-    puts xml_string
     expect(xml_string).to have_xpath('/items/item/title')
   end
   
