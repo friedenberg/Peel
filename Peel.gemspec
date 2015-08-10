@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'Peel/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "Peel"
+  spec.name          = "peel"
   spec.version       = Peel::VERSION
   spec.authors       = ["Sasha Friedenberg"]
   spec.email         = ["sashafriedenberg@gmail.com"]

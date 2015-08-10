@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Peel
  
 	class Item
@@ -16,6 +18,18 @@ module Peel
 			@type = opts[:type] ? opts[:type] : 'default'
 			@object = opts[:object]
 			self
+		end
+
+		def add_to_xml(xml)
+			xml.item(:uid => @uid,
+				 :arg => @arg,
+				 :valid => @valid ? 'yes' : 'no',
+				 :type => @type) {
+					 xml.title @title
+					 xml.subtitle @subtitle
+
+					 @mod_subtitles.each_pair {|key, value| xml.subtitle(value, :mod => key)}
+				 }
 		end
 		
 	end

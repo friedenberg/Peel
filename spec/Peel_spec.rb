@@ -4,41 +4,34 @@ describe Peel do
   it 'has a version number' do
     expect(Peel::VERSION).not_to be nil
   end
-end
 
-describe Peel::Alfred_Helper do
   it 'throws an exception for empty arrays' do
-    workflow_helper = Peel::Alfred_Helper.new
-    expect{workflow_helper.put_results []}.to raise_error(ArgumentError)
+    expect{Peel.alfred_results []}.to raise_error(ArgumentError)
   end
   
   it 'generates XML for Peel::Item' do
-    workflow_helper = Peel::Alfred_Helper.new
     items = Peel::Item.new('Test')
-    xml_string = workflow_helper.put_results items
+    xml_string = Peel.alfred_results([items])
     xml_result = Nokogiri::XML(xml_string) {|c| c.strict}
     expect(xml_result.errors.empty?).to eq(true) 
     expect(xml_string).to have_xpath('/items/item/title').with_text('Test')
   end
   
   it 'generates XML for Arrays of Items' do
-    workflow_helper = Peel::Alfred_Helper.new
     items = [Peel::Item.new('Test'), Peel::Item.new('Test 2')]
-    xml_string = workflow_helper.put_results items
+    xml_string = Peel.alfred_results items
     xml_result = Nokogiri::XML(xml_string) {|c| c.strict}
     expect(xml_result.errors.empty?).to eq(true) 
     expect(xml_string).to have_xpath('/items/item/title')
   end
   
   it 'throws an exception for non-Array and non-Peel::Item' do
-    workflow_helper = Peel::Alfred_Helper.new
-    expect {workflow_helper.put_results nil}.to raise_error(ArgumentError)
+    expect {Peel.alfred_results nil}.to raise_error(ArgumentError)
   end
   
   it 'properly escapes XML' do
-    workflow_helper = Peel::Alfred_Helper.new
-    items = Peel::Item.new('Test', :arg => '&"<>\'', :subtitle => '&"<>\'')
-    xml_string = workflow_helper.put_results items
+  	items = Peel::Item.new('Test', :arg => '&"<>\'', :subtitle => '&"<>\'')
+    xml_string = Peel.alfred_results items
     xml_result = Nokogiri::XML(xml_string) {|c| c.strict}
     expect(xml_result.errors.empty?).to eq(true) 
     expect(xml_string).to have_xpath('/items/item')
